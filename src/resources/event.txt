@@ -1,0 +1,77 @@
+c fichier représentant un évenement
+c description du format
+c les lignes commençant par c sont des commentaires ignorés lors du parsage
+c les lignes commençant par p sont des personnes sous le format(id,nom,prénom,argent)
+c les lignes commençant par o sont des objets sous le format (id_objet,id_proprietaire,nom_objet,prix)
+c les lignes commençant par n définissent le nom de l'évenement
+t Evenement par défaut
+p 1,Marquardt,Alene Huel,739
+p 2,Koepp,Thaddeus Rice,734
+p 3,Torphy,Shelton Bogan IV,657
+p 4,Hoppe,Christia Kuvalis,868
+p 5,Marvin,Abbey Gorczany,541
+p 6,Toy,Denis Wolf MD,902
+p 7,Hudson,Mike Rutherford,577
+p 8,Ziemann,Burl Bogisich,817
+p 9,Casper,Van Larson,721
+p 10,Gusikowski,Sherrell Kling III,769
+p 11,Hartmann,Randal Wolff,778
+p 12,Johns,Branda Friesen MD,522
+p 13,Streich,Dr. Kyle Cormier,891
+p 14,Boyer,Frederic Stoltenberg,847
+p 15,Batz,Terri Roberts PhD,773
+p 16,Reichert,Shanna Schaden,664
+p 17,Moen,Ollie Bergstrom IV,932
+p 18,Nitzsche,Leida Hane III,658
+p 19,Langworth,Willis Bauch,568
+p 20,Bahringer,Bart Effertz IV,958
+p 21,Gerlach,Carolin Tromp,924
+p 22,Altenwerth,Kendall Lehner III,957
+p 23,Doyle,Cecelia Stehr,522
+p 24,Boehm,Cassaundra Bernhard PhD,563
+p 25,Runolfsdottir,Alfredo Collier,558
+p 26,Parker,Lindsay Farrell,698
+p 27,Sawayn,Mr. Aliza Murray,802
+p 28,Bergnaum,Rosina Daugherty DDS,642
+p 29,Kuphal,Johnson Goodwin V,788
+p 30,Barton,Bridget Schimmel,791
+p 31,Shanahan,Miss Leigh Pfannerstill,964
+p 32,Kautzer,Harriett Emmerich,651
+p 33,Marks,Neely Beier,753
+p 34,Wolff,Delisa Purdy,561
+p 35,Dickens,Florrie Schulist Sr.,855
+p 36,Bruen,Shayne Schuster,531
+p 37,Bernhard,Reina Shanahan,527
+p 38,Schumm,Man Hirthe,715
+p 39,Cronin,Mika Jast,933
+p 40,Koch,Logan Osinski DDS,729
+o 4,1,Awesome Concrete Shoes,55,83
+o 5,2,Ergonomic Wooden Computer,1,10
+o 22,3,Intelligent Rubber Computer,10,37
+o 10,4,Incredible Leather Plate,52,55
+o 20,5,Gorgeous Wooden Hat,79,65
+o 27,6,Enormous Plastic Shirt,23,20
+o 28,7,Mediocre Cotton Coat,70,77
+o 13,8,Mediocre Iron Pants,27,78
+o 13,9,Mediocre Wooden Bench,92,44
+o 3,10,Intelligent Aluminum Keyboard,84,35
+o 31,11,Gorgeous Wooden Keyboard,17,90
+o 26,12,Sleek Wooden Keyboard,99,87
+o 19,13,Durable Granite Knife,9,74
+o 17,14,Intelligent Steel Bag,54,22
+o 31,15,Aerodynamic Rubber Computer,18,36
+o 17,16,Lightweight Wooden Computer,64,99
+o 36,17,Ergonomic Silk Shoes,79,26
+o 7,18,Aerodynamic Wooden Keyboard,18,14
+o 24,19,Intelligent Cotton Coat,41,38
+o 6,20,Enormous Leather Bench,45,83
+o 38,21,Rustic Paper Lamp,31,33
+o 32,22,Small Iron Car,55,26
+o 9,23,Lightweight Linen Pants,57,66
+o 34,24,Incredible Rubber Knife,59,65
+o 31,25,Synergistic Iron Wallet,21,17
+o 27,26,Aerodynamic Iron Bench,60,77
+o 31,27,Rustic Wooden Bottle,63,36
+o 15,28,Small Marble Hat,30,71
+o 6,29,Enormous Steel Knife,14,54
+o 14,30,Awesome Concrete Computer,11,17
