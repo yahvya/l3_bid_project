@@ -2,11 +2,13 @@ package yahaya_alexandre.event.participant;
 
 import java.util.ArrayList;
 
+import java.io.Serializable;
+
 /**
  *
  * @author yahayab
  */
-public class Participant
+public class Participant implements Serializable
 {
     private String name;
     private String fname;

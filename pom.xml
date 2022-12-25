@@ -30,6 +30,12 @@
         <artifactId>javafaker</artifactId>
         <version>1.0.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>19</version>
+      <classifier>linux</classifier>
+    </dependency>
   </dependencies>
     
   <build>
@@ -74,7 +80,15 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-      </plugins>
+        <plugin>
+            <groupId>org.openjfx</groupId>
+            <version>0.0.8</version>
+            <artifactId>javafx-maven-plugin</artifactId>
+            <configuration>
+                <mainClass>yahaya_alexandre.App</mainClass>
+            </configuration>
+        </plugin> 
+     </plugins>
     </pluginManagement>
     
     <resources>

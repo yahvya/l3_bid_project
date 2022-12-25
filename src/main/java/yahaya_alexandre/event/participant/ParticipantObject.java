@@ -1,10 +1,12 @@
 package yahaya_alexandre.event.participant;
 
+import java.io.Serializable;
+
 /**
  *
  * @author yahayab
  */
-public class ParticipantObject
+public class ParticipantObject implements Serializable
 {
     private String name;
     

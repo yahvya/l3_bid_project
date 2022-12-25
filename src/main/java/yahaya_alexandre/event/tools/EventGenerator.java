@@ -13,6 +13,7 @@ import com.github.javafaker.Commerce;
 import java.io.FileWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.Locale;
  *
  * @author yahayab
  */
-public class EventGenerator
+public class EventGenerator implements Serializable
 {
     public static String[] instructions =
     {
@@ -143,13 +144,9 @@ public class EventGenerator
             
             reader.close();
             
-            System.out.println("je suis bien ici");
-            
             return new GeneratorParseResult(participants,eventName);
         }
-        catch(Exception e){System.out.println("je suis dans l'exception avec -> " + e.getMessage() + e.getStackTrace()[0].getLineNumber() );}
-        
-        System.out.println("je suis sortit on ne sait pourquoi");
+        catch(Exception e){}
         
         return new GeneratorParseResult();
     }
@@ -157,7 +154,7 @@ public class EventGenerator
     /**
      * @see properties can be used only if getSuccesfultParsed is true
      */
-    public class GeneratorParseResult
+    public class GeneratorParseResult implements Serializable
     {
         private ArrayList<Participant> participants;
         
