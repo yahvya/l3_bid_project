@@ -93,7 +93,13 @@
     
     <resources>
        <resource>
-           <directory>src/resources</directory>
+           <directory>src/resources/css</directory>
+       </resource>
+       <resource>
+           <directory>src/resources/images</directory>
+       </resource>
+       <resource>
+           <directory>src/resources/others</directory>
        </resource>
     </resources>
   </build>

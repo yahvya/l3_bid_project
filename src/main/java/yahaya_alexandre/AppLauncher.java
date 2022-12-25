@@ -4,6 +4,8 @@ import javafx.application.Application;
 
 import javafx.stage.Stage;
 
+import yahaya_alexandre.event.frame.EventLandingPage;
+
 /**
  *
  * @author yahayab
@@ -20,27 +22,21 @@ public class AppLauncher extends Application
     {
        this.window = mainWindow;
        
-       this.setWindowStyle();
+       this.setDefaultWindowStyle();
        
-       this.window.setTitle("Projet poo2 licence 3");
-       this.window.show();
-    }
-    
-    /**
-     * @see init the application
-     */
-    public static void initEventFrame(String[] args)
-    {
-        AppLauncher.launch(args);
+       EventLandingPage landingPage = new EventLandingPage(this.window,"Projet poo2 licence 3");
+       
+       landingPage.putPageOnWindow();
     }
     
     /**
      * @see setup the window before show
      */
-    private void setWindowStyle()
+    private void setDefaultWindowStyle()
     {
         this.window.setWidth(AppLauncher.WINDOW_WIDTH);
         this.window.setHeight(AppLauncher.WINDOW_HEIGHT);
+        this.window.setResizable(false);
         this.window.centerOnScreen();
     }
     
