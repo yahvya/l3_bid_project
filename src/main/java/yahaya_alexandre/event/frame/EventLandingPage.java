@@ -1,6 +1,7 @@
 package yahaya_alexandre.event.frame;
 
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 import javafx.geometry.Insets;
 
@@ -19,6 +20,8 @@ import javafx.stage.Stage;
  */
 public class EventLandingPage extends EventPage
 {
+    private EventCreator eventCreationPage;
+    
     public EventLandingPage(Stage window,String windowBaseTitle)
     {
         super(window,windowBaseTitle,500,280);
@@ -48,6 +51,14 @@ public class EventLandingPage extends EventPage
                 
         this.page = new Scene(globalContainer);
         
+        this.eventCreationPage = new EventCreator(this.window,this.windowBaseTitle,this);
+        
         // add onclick event on buttons
+        createEventsButton.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event)
+            {
+                eventCreationPage.putPageOnWindow();
+            }
+        });
     }
 }

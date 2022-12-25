@@ -4,3 +4,9 @@
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
+
+.message
+{
+    -fx-text-fill: grey;
+    -fx-font-style: italic;
+}

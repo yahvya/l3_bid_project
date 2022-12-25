@@ -17,7 +17,7 @@ public abstract class EventPage
     protected Scene page;
     
     protected String title;
-    private String windowBaseTitle;
+    protected String windowBaseTitle;
     
     private ObservableList stylesheets;
     
@@ -48,6 +48,7 @@ public abstract class EventPage
         this.window.setWidth(this.widthToSet);
         this.window.setHeight(this.heightToSet);
         this.window.show();
+        this.window.centerOnScreen();
         
         return this;
     }

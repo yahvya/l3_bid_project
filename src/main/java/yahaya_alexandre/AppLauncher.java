@@ -36,7 +36,6 @@ public class AppLauncher extends Application
     {
         this.window.setWidth(AppLauncher.WINDOW_WIDTH);
         this.window.setHeight(AppLauncher.WINDOW_HEIGHT);
-        this.window.setResizable(false);
         this.window.centerOnScreen();
     }
     
