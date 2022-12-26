@@ -98,7 +98,7 @@ public class EventGenerator implements Serializable
      * @param eventFilePath the event file path
      * @return parsing result
      */
-    public GeneratorParseResult getParticipantsFromEventFile(String eventFilePath)
+    public GeneratorParseResult getDatasFromEventFile(String eventFilePath)
     {    
         try
         {
