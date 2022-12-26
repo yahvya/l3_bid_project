@@ -22,6 +22,8 @@ public class Auction
         this.seller = seller;
         this.objectToSell = objectToSell;
         this.offer = null;
+        
+        System.out.println(String.join(" ","nouvelle vente crée avec comme propriétaire:",seller.getFname(),"et l'objet:",objectToSell.getName() ) );
     }
 
     /**

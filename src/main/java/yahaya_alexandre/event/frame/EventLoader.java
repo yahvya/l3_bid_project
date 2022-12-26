@@ -4,13 +4,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -18,7 +23,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import yahaya_alexandre.event.auction.Auction;
 import yahaya_alexandre.event.event.Event;
+import yahaya_alexandre.event.participant.Participant;
+import yahaya_alexandre.event.participant.ParticipantObject;
 import yahaya_alexandre.event.tools.EventGenerator;
 import yahaya_alexandre.event.tools.EventGenerator.GeneratorParseResult;
 
@@ -79,7 +87,7 @@ public class EventLoader extends EventPage
         
         // message printer
         
-        Label message = new Label("Appuyez sur le boutton lancer les évenements pour lancer l'exécution des évenements");
+        Label message = new Label("Appuyez sur le boutton lancer les évenements pour lancer l'exécution des évenements, les évenements dont le chargement aura échoué seront ignorés");
         
         message.getStyleClass().add("message");
         
@@ -115,7 +123,7 @@ public class EventLoader extends EventPage
              }
          });
          
-         startEventsButton.setOnAction(new EventHandler<ActonEvent>(){
+         startEventsButton.setOnAction(new EventHandler<ActionEvent>(){
              public void handle(ActionEvent event)
              {
                  startEvents();
@@ -181,19 +189,99 @@ public class EventLoader extends EventPage
         
         ArrayList<Event> eventsList = new ArrayList<Event>();
         
+        ArrayList<String> failedEventsPath = new ArrayList<String>();
+        
+        // iterate on entries to create events 
+        
         for(Map.Entry<Node,String> set : linesMap.entrySet() )
         {
             try
             {
-                GeneratorParseResult parseResult = generator.getDatasFromEventFile(title);
+                String eventFilePath = set.getValue();
                 
-                if(parseResult.getSuccessfulyParsed() )
+                GeneratorParseResult parseResult = generator.getDatasFromEventFile(eventFilePath);
+                
+                if(!parseResult.getSuccessfulyParsed() )
                 {
-                    // finir la récupération des ventes
+                    failedEventsPath.add(eventFilePath);
+                    
+                    continue;
                 }
+                
+                String eventName = parseResult.getEventName();
+                
+                ArrayList<Participant> participants = parseResult.getParticipants();
+                
+                eventsList.add(new Event(eventName,participants,this.getAuctions(eventName,participants) ) );
             }
             catch(Exception e){}
         }
     }
     
+    /**
+     * get auctions from user or create them automtically based on user choice
+     * @param eventName
+     * @param participants
+     * @return auctions
+     */
+    public ArrayList<Auction> getAuctions(String eventName,ArrayList<Participant> participants)
+    {
+        ArrayList<Auction> auctions = new ArrayList<Auction>();
+        
+        // ask user to know the way to generate auctions
+        ButtonType automaticChoice = new ButtonType("Créer automatiquement",ButtonBar.ButtonData.YES);
+        ButtonType manualChoice = new ButtonType("Créer manuellement",ButtonBar.ButtonData.NO);
+        
+        Alert choiceBox = new Alert(Alert.AlertType.CONFIRMATION,"Comment voulez vous générer les ventes ? (manuel par défaut)",automaticChoice,manualChoice);
+        
+        choiceBox.setTitle(eventName);
+        choiceBox.setHeaderText(String.join(" ","Choix pour l'évenement (",eventName,")") );
+        choiceBox.setWidth(500);
+        
+        Optional<ButtonType> result = choiceBox.showAndWait();
+        
+        if(result.isPresent() && result.get() == automaticChoice)
+        {
+            int participantsIndex = participants.size() - 1;
+
+            Random random = new Random();
+
+            for(int countOfAuctions = random.nextInt(1,6); countOfAuctions > 0; countOfAuctions--)
+            {
+                Participant owner = participants.get(random.nextInt(0,participantsIndex) );
+
+                ArrayList<ParticipantObject> ownerObjects = owner.getObjectList();
+
+                int countOfOwnerObjects = ownerObjects.size();
+
+                // restart if owner don't have an object to sell
+                if(countOfOwnerObjects < 1)
+                {
+                    countOfAuctions++;
+
+                    continue;
+                }
+
+                auctions.add(new Auction(owner,ownerObjects.get(random.nextInt(0,countOfOwnerObjects - 1) ) ) );
+            }
+        }
+        else // manual mode
+        {
+            Stage manualModeWindow = new Stage();
+            
+            manualModeWindow.initOwner(this.window);
+            
+            this.window.hide();
+            
+            new AuctionGetterPage(manualModeWindow,this.windowBaseTitle,auctions,participants).putPageOnWindow();
+            
+            manualModeWindow.showAndWait();
+            
+            this.window.show();
+        }
+        
+        return auctions;
+    }
 }
+
+
