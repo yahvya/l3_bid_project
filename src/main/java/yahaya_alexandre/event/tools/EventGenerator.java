@@ -26,6 +26,8 @@ import java.util.Locale;
  */
 public class EventGenerator implements Serializable
 {
+    public static final String EXTENSION = "upjv.event";
+    
     public static String[] instructions =
     {
         "c fichier représentant un évenement",

@@ -10,3 +10,17 @@
     -fx-text-fill: grey;
     -fx-font-style: italic;
 }
+
+.bordered-zone
+{
+    -fx-border-style: solid;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-border-color: lightgrey;
+    -fx-padding: 5 5 5 5;
+}
+
+.centered-zone
+{
+    -fx-alignment: center;
+}

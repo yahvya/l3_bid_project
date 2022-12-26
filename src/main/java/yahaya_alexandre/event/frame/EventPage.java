@@ -6,11 +6,13 @@ import javafx.scene.Scene;
 
 import javafx.stage.Stage;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author yahayab
  */
-public abstract class EventPage
+public abstract class EventPage implements Serializable
 {   
     protected Stage window;
     
