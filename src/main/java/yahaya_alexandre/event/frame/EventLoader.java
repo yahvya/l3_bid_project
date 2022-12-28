@@ -1,6 +1,7 @@
 package yahaya_alexandre.event.frame;
 
 import java.io.File;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -199,6 +200,9 @@ public class EventLoader extends EventPage
             {
                 String eventFilePath = set.getValue();
                 
+                if(eventFilePath == null)
+                    continue;
+                
                 GeneratorParseResult parseResult = generator.getDatasFromEventFile(eventFilePath);
                 
                 if(!parseResult.getSuccessfulyParsed() )
@@ -228,57 +232,60 @@ public class EventLoader extends EventPage
     {
         ArrayList<Auction> auctions = new ArrayList<Auction>();
         
-        // ask user to know the way to generate auctions
-        ButtonType automaticChoice = new ButtonType("Créer automatiquement",ButtonBar.ButtonData.YES);
-        ButtonType manualChoice = new ButtonType("Créer manuellement",ButtonBar.ButtonData.NO);
-        
-        Alert choiceBox = new Alert(Alert.AlertType.CONFIRMATION,"Comment voulez vous générer les ventes ? (manuel par défaut)",automaticChoice,manualChoice);
-        
-        choiceBox.setTitle(eventName);
-        choiceBox.setHeaderText(String.join(" ","Choix pour l'évenement (",eventName,")") );
-        choiceBox.setWidth(500);
-        
-        Optional<ButtonType> result = choiceBox.showAndWait();
-        
-        if(result.isPresent() && result.get() == automaticChoice)
+        try
         {
-            int participantsIndex = participants.size() - 1;
+            // ask user to know the way to generate auctions
+            ButtonType automaticChoice = new ButtonType("Créer automatiquement",ButtonBar.ButtonData.YES);
+            ButtonType manualChoice = new ButtonType("Créer manuellement",ButtonBar.ButtonData.NO);
 
-            Random random = new Random();
+            Alert choiceBox = new Alert(Alert.AlertType.CONFIRMATION,"Comment voulez vous générer les ventes ? (manuel par défaut)",automaticChoice,manualChoice);
 
-            for(int countOfAuctions = random.nextInt(1,6); countOfAuctions > 0; countOfAuctions--)
+            choiceBox.setTitle(eventName);
+            choiceBox.setHeaderText(String.join(" ","Choix pour l'évenement (",eventName,")") );
+            choiceBox.setWidth(500);
+
+            Optional<ButtonType> result = choiceBox.showAndWait();
+
+            if(result.isPresent() && result.get() == automaticChoice)
             {
-                Participant owner = participants.get(random.nextInt(0,participantsIndex) );
+                int participantsIndex = participants.size() - 1;
 
-                ArrayList<ParticipantObject> ownerObjects = owner.getObjectList();
+                Random random = new Random();
 
-                int countOfOwnerObjects = ownerObjects.size();
-
-                // restart if owner don't have an object to sell
-                if(countOfOwnerObjects < 1)
+                for(int countOfAuctions = random.nextInt(1,6); countOfAuctions > 0; countOfAuctions--)
                 {
-                    countOfAuctions++;
+                    Participant owner = participants.get(random.nextInt(0,participantsIndex) );
 
-                    continue;
+                    ArrayList<ParticipantObject> ownerObjects = owner.getObjectList();
+
+                    int countOfOwnerObjects = ownerObjects.size();
+
+                    // restart if owner don't have an object to sell
+                    if(countOfOwnerObjects < 1)
+                    {
+                        countOfAuctions++;
+
+                        continue;
+                    }
+
+                    // the auction have to start after a set of seconds between(3 and 30)
+                    ZonedDateTime startDateTime = ZonedDateTime.now().plusSeconds(random.nextInt(3,30) );
+
+                    auctions.add(new Auction(owner,ownerObjects.get(countOfOwnerObjects == 1  ? 0 : random.nextInt(0,countOfOwnerObjects - 1) ),startDateTime,startDateTime.plusMinutes(random.nextInt(1,3) ) ) );
                 }
+            }
+            else // manual mode
+            {
+                Stage manualModeWindow = new Stage();
 
-                auctions.add(new Auction(owner,ownerObjects.get(random.nextInt(0,countOfOwnerObjects - 1) ) ) );
+                manualModeWindow.initOwner(this.window);
+
+                new AuctionGetterPage(manualModeWindow,this.windowBaseTitle,auctions,participants).putPageOnWindow();
+
+                manualModeWindow.showAndWait();
             }
         }
-        else // manual mode
-        {
-            Stage manualModeWindow = new Stage();
-            
-            manualModeWindow.initOwner(this.window);
-            
-            this.window.hide();
-            
-            new AuctionGetterPage(manualModeWindow,this.windowBaseTitle,auctions,participants).putPageOnWindow();
-            
-            manualModeWindow.showAndWait();
-            
-            this.window.show();
-        }
+        catch(Exception e){};
         
         return auctions;
     }

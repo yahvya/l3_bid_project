@@ -34,8 +34,25 @@ public abstract class EventPage implements Serializable
         this.heightToSet = heightToSet;
         this.title = String.join(" - ",this.windowBaseTitle,this.getDefaultTitle() );
         this.buildPage();
-        this.stylesheets = this.page.getStylesheets();
+        this.addStyleSheets();
+    }
+    
+    public EventPage(Stage window,String windowBaseTitle,int withToSet,int heightToSet,boolean buildLater)
+    {
+        this.window = window;
+        this.windowBaseTitle = windowBaseTitle;
+        this.widthToSet = widthToSet;
+        this.heightToSet = heightToSet;
+        this.title = String.join(" - ",this.windowBaseTitle,this.getDefaultTitle() );
+    }
+    
+    /**
+     * add global stylessheets
+     */
+    protected void addStyleSheets()
+    {
         // add the app default css
+        this.stylesheets = this.page.getStylesheets();
         this.stylesheets.add("style.css");
     }
     
