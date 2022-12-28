@@ -24,3 +24,13 @@
 {
     -fx-alignment: center;
 }
+
+.error
+{
+    -fx-text-fill: red;
+}
+
+.success
+{
+    -fx-text-fill: green;
+}

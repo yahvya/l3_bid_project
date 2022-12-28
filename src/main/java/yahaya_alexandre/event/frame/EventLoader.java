@@ -192,6 +192,9 @@ public class EventLoader extends EventPage
         
         ArrayList<String> failedEventsPath = new ArrayList<String>();
         
+        if(linesMap.size() == 0)
+            return;
+        
         // iterate on entries to create events 
         
         for(Map.Entry<Node,String> set : linesMap.entrySet() )
@@ -220,6 +223,10 @@ public class EventLoader extends EventPage
             }
             catch(Exception e){}
         }
+        
+        EventManagerPage  eventManager = new EventManagerPage(this.window,this.windowBaseTitle,this.landingPage,failedEventsPath,eventsList);
+        
+        eventManager.putPageOnWindow();
     }
     
     /**
