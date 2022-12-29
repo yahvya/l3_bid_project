@@ -127,7 +127,7 @@ public class EventLoader extends EventPage
          startEventsButton.setOnAction(new EventHandler<ActionEvent>(){
              public void handle(ActionEvent event)
              {
-                 startEvents();
+                startEvents();
              }
          });
     }
@@ -224,9 +224,10 @@ public class EventLoader extends EventPage
             catch(Exception e){}
         }
         
-        EventManagerPage  eventManager = new EventManagerPage(this.window,this.windowBaseTitle,this.landingPage,failedEventsPath,eventsList);
+        EventViewer  eventManager = new EventViewer(this.window,this.windowBaseTitle,this.landingPage,failedEventsPath,eventsList);
         
         eventManager.putPageOnWindow();
+        eventManager.startEvent();
     }
     
     /**
@@ -287,12 +288,10 @@ public class EventLoader extends EventPage
 
                 manualModeWindow.initOwner(this.window);
 
-                new AuctionGetterPage(manualModeWindow,this.windowBaseTitle,auctions,participants).putPageOnWindow();
-
-                manualModeWindow.showAndWait();
+                new AuctionGetterPage(manualModeWindow,this.windowBaseTitle,auctions,participants).putPageOnWindow(true);
             }
         }
-        catch(Exception e){};
+        catch(Exception e){System.out.println("exception ici -> " + e);};
         
         return auctions;
     }

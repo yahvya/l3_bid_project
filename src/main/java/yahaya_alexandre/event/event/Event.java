@@ -1,12 +1,17 @@
 package yahaya_alexandre.event.event;
 
 import java.io.Serializable;
-
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import yahaya_alexandre.event.auction.Auction;
-
 import yahaya_alexandre.event.participant.Participant;
-
 import java.util.ArrayList;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import yahaya_alexandre.event.frame.EventViewer;
+import yahaya_alexandre.event.frame.EventViewer.MessageType;
 
 /**
  *
@@ -30,11 +35,23 @@ public class Event implements Serializable
     }
     
     /**
-     * @see start the event and print messages on terminal
+     * @see start the event and print messages in the manager interface
      */
-    public void startEvent()
+    public void startEvent(EventViewer manager)
     {
-        System.out.println("demarrage d'un evenement dans le terminal");
+        ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(this.auctions.size() );
+        
+        ZonedDateTime now = ZonedDateTime.now(); 
+        
+        for(Auction auction : this.auctions)
+        {
+            auction.setPrinterPage(manager);
+            
+            ZonedDateTime startDateTime = auction.getStartDateTime();
+            
+            // config to start a thread after start date or now if already past
+            scheduler.schedule(auction,now.isAfter(startDateTime) ? 0 : now.until(startDateTime,ChronoUnit.MILLIS),TimeUnit.MILLISECONDS);
+        }
     }
 
     /**

@@ -1,11 +1,8 @@
 package yahaya_alexandre.event.frame;
 
 import javafx.collections.ObservableList;
-
 import javafx.scene.Scene;
-
 import javafx.stage.Stage;
-
 import java.io.Serializable;
 
 /**
@@ -66,8 +63,24 @@ public abstract class EventPage implements Serializable
         this.window.setTitle(this.title);
         this.window.setWidth(this.widthToSet);
         this.window.setHeight(this.heightToSet);
-        this.window.show();
         this.window.centerOnScreen();
+        this.window.show();
+        
+        return this;
+    }
+    
+    /**
+     * @see print the landing page on the current window and wait
+     * @return self
+     */
+    public EventPage putPageOnWindow(boolean wait)
+    {
+        this.window.setScene(this.page);
+        this.window.setTitle(this.title);
+        this.window.setWidth(this.widthToSet);
+        this.window.setHeight(this.heightToSet);
+        this.window.centerOnScreen();
+        this.window.showAndWait();
         
         return this;
     }
