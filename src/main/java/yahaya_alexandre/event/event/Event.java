@@ -1,10 +1,8 @@
 package yahaya_alexandre.event.event;
 
 import java.io.Serializable;
-import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import yahaya_alexandre.event.auction.Auction;
 import yahaya_alexandre.event.participant.Participant;
 import java.util.ArrayList;
@@ -43,13 +41,16 @@ public class Event implements Serializable
         
         ZonedDateTime now = ZonedDateTime.now(); 
         
+        manager.printMessage("Lancement de l'évenement", MessageType.STATE);
+        
         for(Auction auction : this.auctions)
         {
             auction.setPrinterPage(manager);
+            auction.setParticipants(participants);
             
             ZonedDateTime startDateTime = auction.getStartDateTime();
             
-            // config to start a thread after start date or now if already past
+            // config to start the thread after start date or now if already past
             scheduler.schedule(auction,now.isAfter(startDateTime) ? 0 : now.until(startDateTime,ChronoUnit.MILLIS),TimeUnit.MILLISECONDS);
         }
     }
