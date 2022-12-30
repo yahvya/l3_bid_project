@@ -18,7 +18,7 @@ import yahaya_alexandre.event.frame.EventViewer.MessageType;
  *
  * @author yahayab
  */
-public class Auction implements Runnable
+public class Auction extends ObservableAuction implements Runnable
 {
     private Participant seller;
     
@@ -29,11 +29,7 @@ public class Auction implements Runnable
     private ZonedDateTime startDateTime;
     private ZonedDateTime endDateTime;
     
-    private EventViewer printerPage;
-    
     private boolean stopThread;
-    
-    private String sellData;
     
     private ArrayList<Participant> participants;
     
@@ -62,15 +58,16 @@ public class Auction implements Runnable
      * try to make an offer in this auction
      * @param offer 
      */
-    public void makeOffer(Offer offer)
+    public void makeOffer(Offer newOffer)
     {
         this.printerPage.printMessage(String.join(" ","réception d'une nouvelle offre (notification des participants) pour l'objet",this.sellData),MessageType.NORMAL);
         
         ArrayList<Offer> offerSession = new ArrayList<Offer>();
         
-        offerSession.add(offer);
+        offerSession.add(newOffer);
         
-        // notifier gens qui ont déjà fait une offre pour qu'ils remplissent la arraylist
+        this.registerParticipant(newOffer.getBuyer() );
+        this.notifyParticipants(offerSession);
         
         // sort the session to have to have the greater offer from the start
         offerSession.sort(Comparator.comparing(Offer::getPrice) );
@@ -78,7 +75,7 @@ public class Auction implements Runnable
         
         Offer greaterOffer = offerSession.remove(0);
         
-        if(greaterOffer.offerIsBetter(this.offer) )
+        if(this.offer.offerIsBetter(greaterOffer) )
         {
             // accept the offer
             this.offer = greaterOffer;
@@ -88,7 +85,7 @@ public class Auction implements Runnable
             this.printerPage.printMessage(
                 String.join(" ",
                     "offre de",
-                    Double.toString(offer.getPrice() ),
+                    Double.toString(this.offer.getPrice() ),
                     "€ fait par",
                     probableBuyer.getName(),
                     probableBuyer.getFname(),
@@ -110,7 +107,7 @@ public class Auction implements Runnable
                 printerPage.printMessage(
                     String.join(" ",
                         "offre de",
-                        Double.toString(offer.getPrice() ),
+                        Double.toString(refusedOffer.getPrice() ),
                         "€ fait par",
                         probableBuyer.getName(),
                         probableBuyer.getFname(),

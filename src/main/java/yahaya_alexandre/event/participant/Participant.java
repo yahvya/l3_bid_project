@@ -1,14 +1,17 @@
 package yahaya_alexandre.event.participant;
 
 import java.util.ArrayList;
-
 import java.io.Serializable;
+import java.util.Random;
+import yahaya_alexandre.event.auction.Offer;
+import yahaya_alexandre.event.auction.AuctionObserver;
+import yahaya_alexandre.event.frame.EventViewer;
 
 /**
  *
  * @author yahayab
  */
-public class Participant implements Serializable
+public class Participant implements Serializable,AuctionObserver
 {
     private String name;
     private String fname;
@@ -124,6 +127,23 @@ public class Participant implements Serializable
             this.objectList.add(object);
         
         return this;
+    }
+    
+    public void receiveNewOfferNotification(ArrayList<Offer> offerSession,String sellData,EventViewer printerPage)
+    {
+        printerPage.printMessage(String.join(" ",this.name,this.fname,"reçoit la notification sur l'objet",sellData), EventViewer.MessageType.NORMAL);
+        
+        Random random = new Random();
+        try
+        {
+            // time to think
+            Thread.sleep(random.nextInt(500,1100) );
+
+            // decide if want to remake an offer
+            if(random.nextBoolean() )
+                offerSession.add(Offer.simulateFrom(this) );
+        }
+        catch(Exception e){}
     }
     
     // getters
