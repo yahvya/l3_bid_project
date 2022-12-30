@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package yahaya_alexandre.event.auction;
 
+import java.util.Random;
 import yahaya_alexandre.event.participant.Participant;
 
 /**
@@ -41,6 +38,29 @@ public class Offer
     public double getPrice()
     {
         return price;
+    }
+    
+    /**
+     * return a random offer from a potentiel buyer
+     * @param probableBuyer
+     * @param random
+     * @return 
+     */
+    public static Offer simulateFrom(Participant probableBuyer,Random random)
+    {
+        Double buyerMoney = probableBuyer.getMoney();
+        
+        return new Offer(probableBuyer,buyerMoney < 1 ? 0 : random.nextDouble(1,buyerMoney) );
+    }
+    
+    /**
+     * return a random offer from a potentiel buyer
+     * @param probableBuyer
+     * @return 
+     */
+    public static Offer simulateFrom(Participant probableBuyer)
+    {   
+        return Offer.simulateFrom(probableBuyer,new Random() );
     }
 
 

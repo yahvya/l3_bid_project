@@ -6,6 +6,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import yahaya_alexandre.event.participant.Participant;
 import yahaya_alexandre.event.participant.ParticipantObject;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import yahaya_alexandre.event.auction.Offer;
 import yahaya_alexandre.event.frame.EventViewer;
@@ -41,7 +44,7 @@ public class Auction implements Runnable
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.stopThread = false;
-        this.offer = null;
+        this.offer = new Offer(seller,objectToSell.getPrice() );
         this.sellData = String.join(" ",
     "<<",
     Integer.toString(this.objectToSell.getObjectId() ),
@@ -53,6 +56,71 @@ public class Auction implements Runnable
     this.seller.getFname(),
     ">>"
         );
+    }
+    
+    /**
+     * try to make an offer in this auction
+     * @param offer 
+     */
+    public void makeOffer(Offer offer)
+    {
+        this.printerPage.printMessage(String.join(" ","réception d'une nouvelle offre (notification des participants) pour l'objet",this.sellData),MessageType.NORMAL);
+        
+        ArrayList<Offer> offerSession = new ArrayList<Offer>();
+        
+        offerSession.add(offer);
+        
+        // notifier gens qui ont déjà fait une offre pour qu'ils remplissent la arraylist
+        
+        // sort the session to have to have the greater offer from the start
+        offerSession.sort(Comparator.comparing(Offer::getPrice) );
+        Collections.reverse(offerSession);
+        
+        Offer greaterOffer = offerSession.remove(0);
+        
+        if(greaterOffer.offerIsBetter(this.offer) )
+        {
+            // accept the offer
+            this.offer = greaterOffer;
+            
+            Participant probableBuyer =  this.offer.getBuyer();
+            
+            this.printerPage.printMessage(
+                String.join(" ",
+                    "offre de",
+                    Double.toString(offer.getPrice() ),
+                    "€ fait par",
+                    probableBuyer.getName(),
+                    probableBuyer.getFname(),
+                    "accepté sur l'objet",
+                    this.sellData
+                ),
+            MessageType.SUCCESS
+            );
+        }
+        else
+        {
+            // refused offers
+            offerSession.add(greaterOffer);
+            
+            for(Offer refusedOffer : offerSession)
+            {
+                Participant probableBuyer = refusedOffer.getBuyer();
+                
+                printerPage.printMessage(
+                    String.join(" ",
+                        "offre de",
+                        Double.toString(offer.getPrice() ),
+                        "€ fait par",
+                        probableBuyer.getName(),
+                        probableBuyer.getFname(),
+                        "refusé sur l'objet",
+                        sellData
+                    ),
+                    MessageType.FAILURE
+                );
+            }
+        }
     }
     
     @Override
@@ -76,19 +144,21 @@ public class Auction implements Runnable
             this.printerPage.printMessage(String.join(" ","début de la vente de la vente de l'objet",this.sellData),MessageType.STATE);
             this.printerPage.setAuctionIsStarted(this);
             
+            Random random = new Random();
+            
+            int participantsIndex = this.participants.size() -1;
+            
             while(!this.stopThread)
             {
-                Thread.sleep(2000);
+                // get a random participant to make an offer
+                Participant probableBuyer = this.participants.get(random.nextInt(0,participantsIndex) );
                 
-                this.printerPage.printMessage(String.join(" ","message de l'objet",this.sellData),MessageType.SUCCESS);
+                // get a random offer from this participant
+                
+                this.makeOffer(Offer.simulateFrom(probableBuyer,random) );
+                
+                Thread.sleep(random.nextInt(1500,3000) );
             }
-            
-            /*
-                dans la boucle 
-                on récupère au hazaed une personne qui veut faire une offre
-                on notifie chaque participant qui remplis ou non une arraylist avec son offre puis on y ajoute l'offre du participant actuel et ensuite on parcours la arraylist pour accepter ou non l'offre 
-                on garde donc la meilleure offre puis on rend la main au run qui va chercher une autre personne
-            */
             
             this.printerPage.printMessage(String.join(" ","fin de la vente de la vente de l'objet",this.sellData),MessageType.STATE);
         }
@@ -119,7 +189,11 @@ public class Auction implements Runnable
      */
     public void setParticipants(ArrayList<Participant> participants)
     {
-        this.participants = participants;
+        ArrayList<Participant> subParticipants = (ArrayList<Participant>) participants.clone();
+        
+        subParticipants.remove(this.seller);
+        
+        this.participants = subParticipants;
     }
 
     /**

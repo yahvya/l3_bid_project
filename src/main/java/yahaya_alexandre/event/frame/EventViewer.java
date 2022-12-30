@@ -306,5 +306,5 @@ public class EventViewer extends EventPage
         return failedEventsZone;
     }
     
-    public enum MessageType{SUCCESS,FAILURE,STATE};
+    public enum MessageType{SUCCESS,FAILURE,STATE,NORMAL};
 }
