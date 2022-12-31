@@ -39,8 +39,11 @@ public abstract class ObservableAuction
      * notify the observers
      * @param offerSession 
      */
-    public void notifyParticipants(ArrayList<Offer> offerSession)
+    public void notifyParticipants(ArrayList<Offer> offerSession,Participant except)
     {
-        this.observers.forEach(participant -> participant.receiveNewOfferNotification(offerSession,sellData,printerPage));
+        this.observers.forEach(participant -> {
+            if(participant != except)
+                participant.receiveNewOfferNotification(offerSession,sellData,printerPage);
+        });
     }
 }

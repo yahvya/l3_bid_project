@@ -1,0 +1,66 @@
+c fichier représentant un évenement
+c description du format
+c les lignes commençant par c sont des commentaires ignorés lors du parsage
+c les lignes commençant par p sont des personnes sous le format(id,nom,prénom,argent)
+c les lignes commençant par o sont des objets sous le format (id_proprietaire,id_objet,nom_objet,prix)
+c les lignes commençant par n définissent le nom de l'évenement
+n Evenement par défaut
+p 1,Barre,David Mathéo,3151
+p 2,Jean,M Pierre Robert,2467
+p 3,Clément,Léa Fleury,2521
+p 4,Fournier,Carpentier Mael,2593
+p 5,Perrot,Mme Valentin Paul,3562
+p 6,Morin,Prof Maëlys Marchal,5597
+p 7,Meyer,Bertrand Enzo,4206
+p 8,Fournier,Adrien Duval,2638
+p 9,Paris,Romain Joly,2887
+p 10,Guérin,Rivière Lucas,3527
+p 11,Leclercq,Mercier Thomas,3531
+p 12,Vasseur,David Alexandre,4395
+p 13,Noël,Prof Chloé Girard,3453
+p 14,Gautier,Mme Lina Francois,2049
+p 15,Collet,Prof Antoine Barbier,3129
+p 16,Marchal,Dr Lucie Moulin,4273
+p 17,David,Martin Maëlle,3608
+p 18,Bertrand,Dr Noémie Charpentier,2678
+p 19,Renaud,Louise Nguyen,2710
+p 20,Bonnet,Zoe Deschamps,5657
+p 21,Da silva,Maxime Dumont,5674
+p 22,Arnaud,Bernard Mélissa,4294
+p 23,Thomas,Carpentier Benjamin,2407
+p 24,Guérin,Mlle Sacha André,2151
+p 25,Méunier,Juliette Lacroix,4939
+p 26,Philippe,Mohamed Vidal,5558
+p 27,Cousin,Océane Roussel,5036
+p 28,Roy,Mlle Camille Ménard,5540
+p 29,Vasseur,Dr Chloé Girard,3218
+p 30,Henry,Prof Evan Meyer,4065
+p 31,Dumas,Yanis Gauthier,4855
+p 32,Le roux,Prof Théo Louis,3391
+p 33,Marchal,Mlle Clémence Blanc,5423
+p 34,Moulin,Dr Pierre Duval,4128
+p 35,Richard,Gonzalez Océane,4833
+p 36,Roussel,Pauline Lemaire,3324
+p 37,Lemoine,Léa Ménard,3789
+p 38,Lemoine,Dr Mathéo Lévêque,3269
+p 39,Leroux,Mlle Sarah Rolland,3936
+p 40,Roussel,Dr Adrien Rey,4885
+o 30,1,Small Plastic Bench,6.55
+o 6,2,Intelligent Marble Gloves,34.67
+o 29,3,Durable Cotton Plate,70.26
+o 7,4,Sleek Granite Wallet,70.36
+o 23,5,Sleek Concrete Table,10.40
+o 34,6,Durable Wooden Car,34.74
+o 13,7,Intelligent Silk Pants,74.37
+o 4,8,Mediocre Paper Gloves,33.49
+o 37,9,Lightweight Leather Clock,56.11
+o 3,10,Awesome Wooden Table,25.21
+o 9,11,Lightweight Concrete Hat,82.04
+o 12,12,Rustic Marble Bottle,59.29
+o 7,13,Fantastic Leather Shoes,70.44
+o 13,14,Ergonomic Cotton Car,21.88
+o 31,15,Heavy Duty Plastic Shirt,79.29
+o 23,16,Rustic Rubber Bench,22.55
+o 24,17,Practical Silk Keyboard,64.03
+o 12,18,Awesome Concrete Clock,9.31
+o 5,19,Aerodynamic Cotton Bottle,16.26

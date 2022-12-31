@@ -1,0 +1,17 @@
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/auction/ObservableAuction.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/event/Event.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/tools/EventGenerator.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/frame/EventLandingPage.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/frame/EventLoader.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/participant/Participant.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/frame/EventViewer.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/frame/AuctionGetterPage.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/exception/NotEnoughParticipants.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/auction/Offer.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/participant/ParticipantObject.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/auction/AuctionObserver.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/AppLauncher.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/frame/EventPage.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/App.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/frame/EventCreator.java
+/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/src/main/java/yahaya_alexandre/event/auction/Auction.java

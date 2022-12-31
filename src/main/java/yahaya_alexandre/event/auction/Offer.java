@@ -1,13 +1,14 @@
 package yahaya_alexandre.event.auction;
 
 import java.util.Random;
+import java.io.Serializable;
 import yahaya_alexandre.event.participant.Participant;
 
 /**
  *
  * @author yahayab
  */
-public class Offer
+public class Offer implements Serializable
 {
     
     private Participant buyer;

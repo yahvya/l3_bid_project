@@ -10,6 +10,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import yahaya_alexandre.event.frame.EventViewer;
 import yahaya_alexandre.event.frame.EventViewer.MessageType;
+import yahaya_alexandre.event.security.SecurityMap;
 
 /**
  *
@@ -45,13 +46,23 @@ public class Event implements Serializable
         
         for(Auction auction : this.auctions)
         {
-            auction.setPrinterPage(manager);
-            auction.setParticipants(participants);
+            try
+            {
+                SecurityMap auctionSecurity = new SecurityMap(manager);
             
-            ZonedDateTime startDateTime = auction.getStartDateTime();
-            
-            // config to start the thread after start date or now if already past
-            scheduler.schedule(auction,now.isAfter(startDateTime) ? 0 : now.until(startDateTime,ChronoUnit.MILLIS),TimeUnit.MILLISECONDS);
+                auction.setPrinterPage(manager);
+                auction.setParticipants(participants);
+                auction.setSecurity(auctionSecurity);
+
+                ZonedDateTime startDateTime = auction.getStartDateTime();
+
+                // config to start the thread after start date or now if already past
+                scheduler.schedule(auction,now.isAfter(startDateTime) ? 0 : now.until(startDateTime,ChronoUnit.MILLIS),TimeUnit.MILLISECONDS);
+            }
+            catch(Exception e)
+            {
+                manager.printMessage("une erreur interne s'est produite, vente ignoré", MessageType.FAILURE);
+            }
         }
     }
 

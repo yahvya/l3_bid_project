@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="yahaya_alexandre.AppTest" time="0.484" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="19"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/target/test-classes:/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/target/classes:/home/yahayab/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/yahayab/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/yahayab/.m2/repository/com/github/javafaker/javafaker/1.0.2/javafaker-1.0.2.jar:/home/yahayab/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:/home/yahayab/.m2/repository/org/yaml/snakeyaml/1.23/snakeyaml-1.23-android.jar:/home/yahayab/.m2/repository/com/github/mifmif/generex/1.0.2/generex-1.0.2.jar:/home/yahayab/.m2/repository/dk/brics/automaton/automaton/1.11-8/automaton-1.11-8.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-controls/19/javafx-controls-19-linux.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19-linux.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19-linux.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://openjdk.java.net/"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="19"/>
+    <property name="user.country" value="FR"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-19-openjdk/lib"/>
+    <property name="sun.java.command" value="/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/target/surefire/surefirebooter15082053033561403259.jar /home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/target/surefire 2022-12-29T14-57-57_856-jvmRun1 surefire3127309136296463015tmp surefire_015320447045948101027tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/target/test-classes:/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/target/classes:/home/yahayab/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/yahayab/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/yahayab/.m2/repository/com/github/javafaker/javafaker/1.0.2/javafaker-1.0.2.jar:/home/yahayab/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:/home/yahayab/.m2/repository/org/yaml/snakeyaml/1.23/snakeyaml-1.23-android.jar:/home/yahayab/.m2/repository/com/github/mifmif/generex/1.0.2/generex-1.0.2.jar:/home/yahayab/.m2/repository/dk/brics/automaton/automaton/1.11-8/automaton-1.11-8.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-controls/19/javafx-controls-19-linux.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19-linux.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19.jar:/home/yahayab/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19-linux.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/yahayab"/>
+    <property name="user.language" value="fr"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2022-10-18"/>
+    <property name="java.home" value="/usr/lib/jvm/java-19-openjdk"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv/target/surefire/surefirebooter15082053033561403259.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="19.0.1+10"/>
+    <property name="user.name" value="yahayab"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.15.76-1-MANJARO"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="maven.ext.class.path" value="/var/lib/snapd/snap/netbeans/74/netbeans/java/maven-nblib/netbeans-eventspy.jar"/>
+    <property name="localRepository" value="/home/yahayab/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="19.0.1"/>
+    <property name="user.dir" value="/home/yahayab/Bureau/fac/l3/semestre-1/poo-2/enchere_projet_upjv"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="N/A"/>
+    <property name="java.vm.version" value="19.0.1+10"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="63.0"/>
+  </properties>
+  <testcase name="shouldAnswerWithTrue" classname="yahaya_alexandre.AppTest" time="0.044"/>
+</testsuite>

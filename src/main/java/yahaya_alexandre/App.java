@@ -1,6 +1,5 @@
 package yahaya_alexandre;
 
-
 import javafx.application.Application;
 
 public class App

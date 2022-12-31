@@ -1,5 +1,6 @@
 package yahaya_alexandre.event.auction;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -13,12 +14,13 @@ import java.util.concurrent.TimeUnit;
 import yahaya_alexandre.event.auction.Offer;
 import yahaya_alexandre.event.frame.EventViewer;
 import yahaya_alexandre.event.frame.EventViewer.MessageType;
+import yahaya_alexandre.event.security.SecurityMap;
 
 /**
  *
  * @author yahayab
  */
-public class Auction extends ObservableAuction implements Runnable
+public class Auction extends ObservableAuction implements Runnable,Serializable
 {
     private Participant seller;
     
@@ -32,6 +34,8 @@ public class Auction extends ObservableAuction implements Runnable
     private boolean stopThread;
     
     private ArrayList<Participant> participants;
+    
+    private SecurityMap security;
     
     public Auction(Participant seller,ParticipantObject objectToSell,ZonedDateTime startDateTime,ZonedDateTime endDateTime)
     {
@@ -66,8 +70,10 @@ public class Auction extends ObservableAuction implements Runnable
         
         offerSession.add(newOffer);
         
-        this.registerParticipant(newOffer.getBuyer() );
-        this.notifyParticipants(offerSession);
+        Participant potentialBuyer = newOffer.getBuyer();
+        
+        this.registerParticipant(potentialBuyer);
+        this.notifyParticipants(offerSession,potentialBuyer);
         
         // sort the session to have to have the greater offer from the start
         offerSession.sort(Comparator.comparing(Offer::getPrice) );
@@ -77,23 +83,33 @@ public class Auction extends ObservableAuction implements Runnable
         
         if(this.offer.offerIsBetter(greaterOffer) )
         {
-            // accept the offer
-            this.offer = greaterOffer;
-            
-            Participant probableBuyer =  this.offer.getBuyer();
-            
-            this.printerPage.printMessage(
-                String.join(" ",
-                    "offre de",
-                    Double.toString(this.offer.getPrice() ),
-                    "€ fait par",
-                    probableBuyer.getName(),
-                    probableBuyer.getFname(),
-                    "accepté sur l'objet",
-                    this.sellData
-                ),
-            MessageType.SUCCESS
-            );
+            try
+            {
+                this.security.addInMap(greaterOffer);
+                
+                // accept the offer
+                this.offer = greaterOffer;
+
+                Participant probableBuyer =  this.offer.getBuyer();
+
+                this.printerPage.printMessage(
+                    String.join(" ",
+                        "offre de",
+                        Double.toString(this.offer.getPrice() ),
+                        "€ fait par",
+                        probableBuyer.getName(),
+                        probableBuyer.getFname(),
+                        "accepté sur l'objet",
+                        this.sellData
+                    ),
+                MessageType.SUCCESS
+                );
+            }
+            catch(Exception e)
+            {
+                this.printerPage.printMessage("erreur interne offre ignoré",MessageType.FAILURE);
+                System.out.println(e);
+            }
         }
         else
         {
@@ -178,6 +194,17 @@ public class Auction extends ObservableAuction implements Runnable
     public void setPrinterPage(EventViewer printerPage)
     {
         this.printerPage = printerPage;
+    }
+    
+    /**
+     * set the value of security
+     * @param security 
+     */
+    public void setSecurity(SecurityMap security)
+    {
+        this.security = security;
+
+        this.security.setSellData(this.sellData);
     }
     
     /**
