@@ -2,6 +2,8 @@ package yahaya_alexandre.event.auction;
 
 import java.util.Random;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+
 import yahaya_alexandre.event.participant.Participant;
 
 /**
@@ -14,11 +16,14 @@ public class Offer implements Serializable
     private Participant buyer;
     
     private double price;
+
+    private ZonedDateTime offerDate;
     
     public Offer(Participant buyer,double price)
     {
         this.buyer = buyer;
         this.price = price;
+        this.offerDate = ZonedDateTime.now();
     }
     
     /**
@@ -75,4 +80,12 @@ public class Offer implements Serializable
         return buyer;
     }
 
+    /**
+     * Get the value of offerDate
+     * @return offerDate
+     */
+    public ZonedDateTime getOfferDate()
+    {
+        return this.offerDate;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import yahaya_alexandre.event.frame.EventViewer;
 import yahaya_alexandre.event.frame.EventViewer.MessageType;
-import yahaya_alexandre.event.security.SecurityMap;
+import yahaya_alexandre.event.security.SecurityManager;
 
 /**
  *
@@ -48,7 +48,7 @@ public class Event implements Serializable
         {
             try
             {
-                SecurityMap auctionSecurity = new SecurityMap(manager);
+                SecurityManager auctionSecurity = new SecurityManager(auction);
             
                 auction.setPrinterPage(manager);
                 auction.setParticipants(participants);

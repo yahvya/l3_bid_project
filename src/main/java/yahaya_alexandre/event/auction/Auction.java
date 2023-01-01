@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import yahaya_alexandre.event.auction.Offer;
 import yahaya_alexandre.event.frame.EventViewer;
 import yahaya_alexandre.event.frame.EventViewer.MessageType;
-import yahaya_alexandre.event.security.SecurityMap;
+import yahaya_alexandre.event.security.SecurityManager;
 
 /**
  *
@@ -35,7 +35,7 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
     
     private ArrayList<Participant> participants;
     
-    private SecurityMap security;
+    private SecurityManager security;
     
     public Auction(Participant seller,ParticipantObject objectToSell,ZonedDateTime startDateTime,ZonedDateTime endDateTime)
     {
@@ -85,7 +85,7 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
         {
             try
             {
-                this.security.addInMap(greaterOffer);
+                this.security.addOfferToTransactions(greaterOffer);
                 
                 // accept the offer
                 this.offer = greaterOffer;
@@ -200,11 +200,9 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
      * set the value of security
      * @param security 
      */
-    public void setSecurity(SecurityMap security)
+    public void setSecurity(SecurityManager security)
     {
         this.security = security;
-
-        this.security.setSellData(this.sellData);
     }
     
     /**
