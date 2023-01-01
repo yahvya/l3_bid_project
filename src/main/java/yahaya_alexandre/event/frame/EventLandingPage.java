@@ -50,7 +50,6 @@ public class EventLandingPage extends EventPage
         this.page = new Scene(globalContainer);
         
         final EventCreator eventCreationPage = new EventCreator(this.window,this.windowBaseTitle,this);
-        
         final EventLoader eventLoaderPage = new EventLoader(this.window,this.windowBaseTitle,this);
         
         // add onclick event on buttons

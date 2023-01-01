@@ -24,7 +24,7 @@ public class SecurityManager
         this.hasher = MessageDigest.getInstance("SHA-256");
         this.sellerId = linkedAuction.getSeller().getId();
         this.objectId = linkedAuction.getObjectToSell().getObjectId();
-        this.transactionBlockId = 1;
+        this.transactionBlockId = 0;
         this.transactionsBlock = new ArrayList<TransactionBlock>();
 
         linkedAuction.setSecurity(this);
@@ -36,7 +36,9 @@ public class SecurityManager
      */
     public void addOfferToTransactions(Offer offer)
     {
-        this.transactionsBlock.add(new TransactionBlock(offer,this.sellerId,this.objectId,this.transactionBlockId,this.transactionBlockId == 1 ? null : this.transactionsBlock.get(this.transactionBlockId),this.hasher) );
+        this.transactionsBlock.add(new TransactionBlock(offer,this.sellerId,this.objectId,this.transactionBlockId,this.transactionBlockId == 0 ? null : this.transactionsBlock.get(this.transactionBlockId - 1),this.hasher) );
+
+        this.transactionBlockId++;
     }
 
     /**
@@ -51,8 +53,6 @@ public class SecurityManager
 
         System.arraycopy(first,0,result,0,first.length);
         System.arraycopy(second,0,result,first.length,second.length);
-
-        System.out.println("valeur de la fonction -> " + result + " taille " + result.length);
 
         return result;
     }
@@ -76,8 +76,6 @@ public class SecurityManager
             this.transactionBlockId = transactionBlockId;
             this.blockOffer = blockOffer;   
             this.blockHash = this.buildHash(hasher);
-            
-            System.out.println("hash trouvé -> " + this.blockHash + " nombre d'élements -> " + this.blockHash.length);
         }
 
         /**
@@ -99,8 +97,6 @@ public class SecurityManager
 
             if(this.previousBlockHash != null)
                 hash = SecurityManager.concatBytes(this.previousBlockHash,hash);
-            else
-                System.out.println("je suis entré ici");
 
             return hash;
         }
@@ -123,4 +119,6 @@ public class SecurityManager
             return this.blockHash;
         }
     }
+
+    // trouver quel valeur additioné au hash donnera 20 0
 }
