@@ -291,7 +291,7 @@ public class EventLoader extends EventPage
                 new AuctionGetterPage(manualModeWindow,this.windowBaseTitle,auctions,participants).putPageOnWindow(true);
             }
         }
-        catch(Exception e){System.out.println("exception ici -> " + e);};
+        catch(Exception e){};
         
         return auctions;
     }

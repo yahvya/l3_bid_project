@@ -47,14 +47,14 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
         this.offer = new Offer(seller,objectToSell.getPrice() );
         this.sellData = String.join(" ",
     "<<",
-    Integer.toString(this.objectToSell.getObjectId() ),
-    this.objectToSell.getName(),
-    ">> avec un prix de départ à",
-    Double.toString(this.objectToSell.getPrice() ),
-    " appatenant à",
-    this.seller.getName(),
-    this.seller.getFname(),
-    ">>"
+            Integer.toString(this.objectToSell.getObjectId() ),
+            this.objectToSell.getName(),
+            ">> avec un prix de départ à",
+            Double.toString(this.objectToSell.getPrice() ),
+            " appatenant à",
+            this.seller.getName(),
+            this.seller.getFname(),
+            ">>"
         );
     }
     
@@ -102,7 +102,7 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
                         "accepté sur l'objet",
                         this.sellData
                     ),
-                MessageType.SUCCESS
+                    MessageType.SUCCESS
                 );
             }
             catch(Exception e)
@@ -141,6 +141,11 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
     {
         try
         {   
+            Random random = new Random();
+
+            // create and start miners thread miners
+            int participantsIndex = this.participants.size() - 1;
+
             ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(1);
             
             ZonedDateTime now = ZonedDateTime.now();
@@ -151,15 +156,13 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
                 public void run()
                 {
                     stopThread = true;
+                    security.setAuctionAsFinished();
                 }
             },now.isAfter(this.endDateTime) ? 0 : now.until(this.endDateTime,ChronoUnit.MILLIS),TimeUnit.MILLISECONDS);
-            
+
             this.printerPage.printMessage(String.join(" ","début de la vente de la vente de l'objet",this.sellData),MessageType.STATE);
             this.printerPage.setAuctionIsStarted(this);
-            
-            Random random = new Random();
-            
-            int participantsIndex = this.participants.size() -1;
+            this.security.setAuctionAsStarted();
             
             while(!this.stopThread)
             {
@@ -175,7 +178,11 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
             
             this.printerPage.printMessage(String.join(" ","fin de la vente de la vente de l'objet",this.sellData),MessageType.STATE);
         }
-        catch(Exception e){this.printerPage.printMessage("fin erreur ici",MessageType.STATE);}
+        catch(Exception e)
+        {
+            System.out.println(e);
+            this.printerPage.printMessage("la vente a été stoppé suite à une erreur",MessageType.STATE);
+        }
     }
     
     /**
@@ -277,4 +284,8 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
         return this.participants;
     }
 
-}
+    public EventViewer getPrinterPage()
+    {
+        return this.printerPage;
+    }
+}   

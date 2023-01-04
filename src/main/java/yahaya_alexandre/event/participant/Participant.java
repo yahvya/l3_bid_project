@@ -134,6 +134,7 @@ public class Participant implements Serializable,AuctionObserver
         printerPage.printMessage(String.join(" ",this.name,this.fname,"reçoit la notification sur l'objet",sellData), EventViewer.MessageType.NORMAL);
         
         Random random = new Random();
+        
         try
         {
             // time to think

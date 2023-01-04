@@ -1,7 +1,7 @@
 package yahaya_alexandre;
 
 import javafx.application.Application;
-
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import yahaya_alexandre.event.frame.EventLandingPage;
@@ -34,6 +34,7 @@ public class AppLauncher extends Application
      */
     private void setDefaultWindowStyle()
     {
+        this.window.getIcons().add(new Image("app-icon.jpg") );
         this.window.setWidth(AppLauncher.WINDOW_WIDTH);
         this.window.setHeight(AppLauncher.WINDOW_HEIGHT);
         this.window.centerOnScreen();

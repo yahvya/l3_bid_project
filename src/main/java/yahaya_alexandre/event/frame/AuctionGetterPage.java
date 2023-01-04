@@ -31,15 +31,12 @@ public class AuctionGetterPage extends EventPage
     private ArrayList<Auction> toFill;
     private ArrayList<Participant> participants;
     
-    private HashMap<HBox,Auction> linesMap;
-    
     public AuctionGetterPage(Stage window,String windowBaseTitle,ArrayList<Auction> toFill,ArrayList<Participant> participants)
     {
         super(window,windowBaseTitle,900,450,true);
         
         this.toFill = toFill;
         this.participants = participants;
-        this.linesMap = new HashMap<HBox,Auction>();
         this.buildPage();
         this.addStyleSheets();
     }

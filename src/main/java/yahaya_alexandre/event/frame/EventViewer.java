@@ -103,9 +103,16 @@ public class EventViewer extends EventPage
                     case STATE:
                         messageContainer.getStyleClass().add("state");
                     ; break;
+
+                    case MINER:
+                        messageContainer.getStyleClass().add("miner");
+                    ; break;
+
+                    default:;
                 }
 
                 messagesZoneChildren.add(0,messageContainer);
+                // messagesZoneChildren.add(messageContainer);
             }
         });
     }
@@ -237,8 +244,7 @@ public class EventViewer extends EventPage
         
         scrollableZone.setContent(recapZone);
         scrollableZone.setPadding(new Insets(10) );
-        scrollableZone.setMinSize(370,100);
-        scrollableZone.setMaxSize(370,100);
+        scrollableZone.setMaxSize(370,250);
         
         VBox futureAuctionsZone = new VBox(20);
         
@@ -306,5 +312,5 @@ public class EventViewer extends EventPage
         return failedEventsZone;
     }
     
-    public enum MessageType{SUCCESS,FAILURE,STATE,NORMAL};
+    public enum MessageType{SUCCESS,FAILURE,STATE,NORMAL,MINER};
 }

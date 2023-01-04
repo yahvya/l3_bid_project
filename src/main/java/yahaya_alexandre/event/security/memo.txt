@@ -1,0 +1,4 @@
+on a la chaine des transactions
+quand ça atteint une certaine taille les mineurs tente de vérifier sa validité
+si c'est valide alors on l'ajoute au à la seconde chaine
+s'il y a des choses dans la seconde chaine dont les préfixes n'ont pas été trouvé les mineurs vont tenté de trouver les préfixes

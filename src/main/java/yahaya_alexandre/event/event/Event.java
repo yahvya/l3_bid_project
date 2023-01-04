@@ -48,11 +48,10 @@ public class Event implements Serializable
         {
             try
             {
-                SecurityManager auctionSecurity = new SecurityManager(auction);
-            
                 auction.setPrinterPage(manager);
                 auction.setParticipants(participants);
-                auction.setSecurity(auctionSecurity);
+                
+                SecurityManager auctionSecurity = new SecurityManager(auction);
 
                 ZonedDateTime startDateTime = auction.getStartDateTime();
 

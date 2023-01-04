@@ -18,7 +18,7 @@ public abstract class EventPage implements Serializable
     protected String title;
     protected String windowBaseTitle;
     
-    private ObservableList stylesheets;
+    private ObservableList<String> stylesheets;
     
     protected int heightToSet;
     protected int widthToSet;
@@ -34,7 +34,7 @@ public abstract class EventPage implements Serializable
         this.addStyleSheets();
     }
     
-    public EventPage(Stage window,String windowBaseTitle,int withToSet,int heightToSet,boolean buildLater)
+    public EventPage(Stage window,String windowBaseTitle,int widthToSet,int heightToSet,boolean buildLater)
     {
         this.window = window;
         this.windowBaseTitle = windowBaseTitle;
