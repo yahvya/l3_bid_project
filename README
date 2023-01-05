@@ -1,0 +1,14 @@
+pour exécuter
+lancez le programme via la class principal App.java
+une fiche évenement sera nécessaire (une fiche par défaut a été généré elle pourra être utilisé via le dossier src/resources/others/)
+    pour créer une fiche évenement
+        sur l'accueil de l'application appuyez sur créer un évenement
+        ajouter le nombre d'évenements souhaités 
+        remplissez les champs
+        puis appuyze sur créer vos fiches d'évenements (les fiches qui disparaitront seront celles qui seront crées)
+
+pour lancer un / des évenements 
+    sur la page d'accueil appuyez sur charger vos évenements
+    selectionner les fichiers évenements à lancer 
+    puis appuyez sur lancer les évenements chargés
+    on vous demandera si vous souhaitez générer automatiquement les ventes ou les saisir manuellement

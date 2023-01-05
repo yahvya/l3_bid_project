@@ -1,0 +1,62 @@
+c fichier représentant un évenement
+c description du format
+c les lignes commençant par c sont des commentaires ignorés lors du parsage
+c les lignes commençant par p sont des personnes sous le format(id,nom,prénom,argent)
+c les lignes commençant par o sont des objets sous le format (id_proprietaire,id_objet,nom_objet,prix)
+c les lignes commençant par n définissent le nom de l'évenement
+n Evenement soutenance
+p 1,Aubert,Elisa Guérin,3043
+p 2,Dufour,Lucas Arthur,3573
+p 3,Brun,Mme Benjamin Mercier,5466
+p 4,Guillaume,Roger Paul,2059
+p 5,Marchal,Mlle Jade Royer,3007
+p 6,Louis,Yanis Boyer,4197
+p 7,Blanchard,Dufour Benjamin,3804
+p 8,Marchand,Mlle Paul Francois,2144
+p 9,Leroy,Julie Lecomte,5317
+p 10,Charpentier,Julien Ambre,5960
+p 11,Lambert,Mme Louna Rivière,2798
+p 12,Joly,Mlle Maxence Gauthier,5569
+p 13,Aubry,Dr Anaïs Garcia,3768
+p 14,Bertrand,Thomas Lecomte,5349
+p 15,Rodriguez,Dumas Mathilde,2138
+p 16,Pierre,Noa Roux,3530
+p 17,Perrin,Jules Nicolas,5703
+p 18,Giraud,Gabriel Rémy,4187
+p 19,Roche,Guillot Maëlys,3756
+p 20,Arnaud,Prof Camille Dumas,5966
+p 21,Rivière,Mathis Legrand,4051
+p 22,Marie,Leroux Léo,4511
+p 23,Brun,Mohamed Richard,5199
+p 24,Jean,Mlle Clémence Masson,3639
+p 25,Dumas,Lucie Simon,3360
+p 26,Fabre,Girard Ethan,2878
+p 27,Gautier,Colin Justine,3467
+p 28,Pierre,Jules Pons,5689
+p 29,Hubert,Dupuis Rayan,4488
+p 30,Bernard,Bertrand Océane,4008
+o 9,1,Enormous Steel Chair,52.52
+o 20,2,Gorgeous Cotton Bench,41.09
+o 27,3,Intelligent Copper Chair,42.79
+o 8,4,Ergonomic Plastic Plate,85.44
+o 25,5,Rustic Granite Car,46.04
+o 9,6,Durable Copper Keyboard,20.30
+o 14,7,Heavy Duty Copper Wallet,75.98
+o 27,8,Mediocre Cotton Plate,35.85
+o 18,9,Synergistic Marble Pants,75.50
+o 15,10,Incredible Granite Clock,29.44
+o 14,11,Ergonomic Steel Knife,66.17
+o 4,12,Gorgeous Linen Chair,19.80
+o 27,13,Enormous Marble Gloves,3.41
+o 9,14,Durable Wooden Lamp,87.15
+o 20,15,Fantastic Plastic Computer,33.68
+o 21,16,Sleek Silk Clock,78.20
+o 21,17,Ergonomic Leather Bag,58.37
+o 9,18,Synergistic Wool Computer,15.51
+o 18,19,Rustic Copper Gloves,4.66
+o 2,20,Rustic Paper Computer,18.03
+o 26,21,Intelligent Silk Pants,76.37
+o 9,22,Sleek Silk Watch,94.29
+o 6,23,Fantastic Linen Bag,48.19
+o 22,24,Intelligent Concrete Wallet,26.86
+o 28,25,Aerodynamic Rubber Plate,51.37
