@@ -1,7 +1,5 @@
 package yahaya_alexandre.event.security;
 
-import java.security.MessageDigest;
-
 import yahaya_alexandre.event.security.SecurityManager.TransactionBlock;
 
 public class SecurityAction 
@@ -9,8 +7,6 @@ public class SecurityAction
     private ActionType action;
 
     private TransactionBlock[] transactionBlockGroup;
-
-    private MessageDigest hasher;
 
     private boolean alreadyPerformed;
 
@@ -21,11 +17,10 @@ public class SecurityAction
         this.alreadyPerformed = false;
     }
 
-    public SecurityAction(ActionType action,TransactionBlock[] transactionBlockGroup,MessageDigest hasher)
+    public SecurityAction(ActionType action,TransactionBlock[] transactionBlockGroup)
     {
         this.action = action;
         this.transactionBlockGroup = transactionBlockGroup;
-        this.hasher = hasher;
         this.alreadyPerformed = false;
     }
 
@@ -53,15 +48,6 @@ public class SecurityAction
     synchronized public void setAsPerfomed()
     {
         this.alreadyPerformed = true;
-    }
-
-    /**
-     * Get the value of hasher
-     * @return the hasher
-     */
-    public MessageDigest getHasher()
-    {
-        return this.hasher;
     }
 
     /**

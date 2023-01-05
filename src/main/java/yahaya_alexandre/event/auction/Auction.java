@@ -176,7 +176,7 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
                 Thread.sleep(random.nextInt(1500,3000) );
             }
             
-            this.printerPage.printMessage(String.join(" ","fin de la vente de la vente de l'objet",this.sellData),MessageType.STATE);
+            this.printerPage.printMessage(String.join(" ","fin de la vente de la vente de l'objet",this.sellData,"attente de la fin des opérations de sécurité"),MessageType.STATE);
         }
         catch(Exception e)
         {

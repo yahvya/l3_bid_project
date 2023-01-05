@@ -2,12 +2,9 @@ package yahaya_alexandre.event.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.crypto.SecretKey;
 
 import yahaya_alexandre.event.auction.Auction;
 import yahaya_alexandre.event.auction.Offer;
@@ -19,11 +16,9 @@ import yahaya_alexandre.event.security.SecurityAction.ActionType;
 public class SecurityManager
 {
     public static final int COUNT_OF_BLOCK_BEFORE_VERIFICATION = 2;
-    public static final int COUNT_OF_ZERO = 3;
+    public static final int COUNT_OF_ZERO = 3; // greater reasonable value we found to test
     public static final int MIN_MINERS = 2;
     public static final int MAX_MINERS = 4;
-
-    private MessageDigest hasher;
 
     private int sellerId;
     private int objectId;
@@ -45,18 +40,23 @@ public class SecurityManager
 
     private ReentrantLock locker;
 
-    public SecurityManager(Auction linkedAuction) throws NoSuchAlgorithmException
+    private ArrayList<SecurityAction> incompleteActions;
+
+    private boolean haveToStopAfterActions;
+
+    public SecurityManager(Auction linkedAuction)
     {
         this.transactionBlockId = 0;
         this.transactionBlockGroupIndex = 0;
+        this.haveToStopAfterActions = false;
         this.linkedAuction = linkedAuction;
         this.transactionBlockGroup = new TransactionBlock[SecurityManager.COUNT_OF_BLOCK_BEFORE_VERIFICATION];
-        this.hasher = MessageDigest.getInstance("SHA-256");
         this.sellerId = linkedAuction.getSeller().getId();
         this.objectId = linkedAuction.getObjectToSell().getObjectId();
         this.transactionsBlock = new ArrayList<TransactionBlock>();
         this.confirmationsBlock = new ArrayList<ConfirmationBlock>();
         this.printerPage = linkedAuction.getPrinterPage();
+        this.incompleteActions = new ArrayList<SecurityAction>();
         this.locker = new ReentrantLock();
 
         linkedAuction.setSecurity(this);
@@ -68,28 +68,34 @@ public class SecurityManager
      */
     public void addOfferToTransactions(Offer offer)
     {
-        TransactionBlock newTransactionBlock = new TransactionBlock(offer,this.sellerId,this.objectId,this.transactionBlockId,this.transactionBlockId == 0 ? null : this.transactionsBlock.get(this.transactionBlockId - 1),this.hasher);
-
-        this.transactionsBlock.add(newTransactionBlock);
-        this.transactionBlockId++;
-        this.transactionBlockGroup[this.transactionBlockGroupIndex++] = newTransactionBlock;
-
-        if(this.transactionBlockGroupIndex == SecurityManager.COUNT_OF_BLOCK_BEFORE_VERIFICATION)
+        try
         {
-            SecurityAction todo = new SecurityAction(ActionType.VERIFY,this.transactionBlockGroup,this.hasher);
+            TransactionBlock newTransactionBlock = new TransactionBlock(offer,this.sellerId,this.objectId,this.transactionBlockId,this.transactionBlockId == 0 ? null : this.transactionsBlock.get(this.transactionBlockId - 1),MessageDigest.getInstance("SHA-256"));
 
-            // notify miners to verify this group of transaction block
-            for(Miner m : this.miners)
-                m.receiveActionToPerform(todo);
+            this.transactionsBlock.add(newTransactionBlock);
+            this.transactionBlockId++;
+            this.transactionBlockGroup[this.transactionBlockGroupIndex++] = newTransactionBlock;
 
-            // place the last element of the group in the start of the array to verify because the miners can't verify this block in this turn
+            if(this.transactionBlockGroupIndex == SecurityManager.COUNT_OF_BLOCK_BEFORE_VERIFICATION)
+            {
+                SecurityAction todo = new SecurityAction(ActionType.VERIFY,this.transactionBlockGroup);
 
-            this.transactionBlockGroupIndex = 1;
+                this.incompleteActions.add(todo);
 
-            this.transactionBlockGroup = new TransactionBlock[SecurityManager.COUNT_OF_BLOCK_BEFORE_VERIFICATION];
+                // notify miners to verify this group of transaction block
+                for(Miner m : this.miners)
+                    m.receiveActionToPerform(todo);
 
-            this.transactionBlockGroup[0] = newTransactionBlock;
+                // place the last element of the group in the start of the array to verify because the miners can't verify this block in this turn
+
+                this.transactionBlockGroupIndex = 1;
+
+                this.transactionBlockGroup = new TransactionBlock[SecurityManager.COUNT_OF_BLOCK_BEFORE_VERIFICATION];
+
+                this.transactionBlockGroup[0] = newTransactionBlock;
+            }
         }
+        catch(Exception e){}
     }
 
     /**
@@ -146,13 +152,28 @@ public class SecurityManager
      */
     public void setAuctionAsFinished()
     {
+        if(this.incompleteActions.size() == 0)
+            this.endAuction();
+        else 
+            this.haveToStopAfterActions = true;
+    }
+
+    /**
+     * complete end auction action
+     */
+    private void endAuction()
+    {
         for(Miner m : this.miners)
             m.receiveActionToPerform(new SecurityAction(ActionType.STOP) );
+
+        this.printerPage.printMessage(String.join(" ","fin de la vente de la vente de l'objet",this.linkedAuction.getObjectToSell().getName() ),MessageType.STATE);
     }
 
     /**
      * add a transaction group as verified from miners if success
      * @param transactionBlocks
+     * @param isOk
+     * @param baseAction
      */
     public void receiveTransactionBlockGroupVerificationConfirmation(TransactionBlock[] transactionBlockGroup,boolean isOk,SecurityAction baseAction)
     {   
@@ -161,7 +182,7 @@ public class SecurityManager
         // ignore if already performed
         if(baseAction.getAlreadyPerformed() )
         {
-            this.printerPage.printMessage("Une action d'un mineur vient d'être ignoré car déjà complété par un autre",MessageType.MINER);
+            this.printerPage.printMessage("La vérification d'un mineur vient d'être ignoré car déjà complété par un autre",MessageType.MINER);
 
             return;
         }
@@ -172,9 +193,28 @@ public class SecurityManager
         {
             this.printerPage.printMessage("Un mineur vient de finir la vérification d'un paquet",MessageType.MINER);
 
-            // ajout aux groupes à faire
-
             baseAction.setAsPerfomed();
+
+            this.incompleteActions.remove(baseAction);
+
+            // set blocks as verified
+            for(TransactionBlock t : transactionBlockGroup)
+                t.setAsVerified();
+
+            try
+            {
+                // notify miners to find the prefix of the verifed group
+                SecurityAction todo = new SecurityAction(ActionType.SEARCH_PREFIX,transactionBlockGroup);
+
+                this.incompleteActions.add(todo);
+
+                for(Miner m : this.miners)
+                    m.receiveActionToPerform(todo);
+            }
+            catch(Exception e){}
+
+            if(this.haveToStopAfterActions && this.incompleteActions.size() == 0)
+                this.endAuction();
         }
         else
         {
@@ -184,6 +224,53 @@ public class SecurityManager
 
             this.printerPage.printMessage(String.join(" ","Un mineur à trouvé une erreur lors d'une vérification, arrêt de la vente"),MessageType.FAILURE);
         }
+
+        this.locker.unlock();
+    }
+
+    /**
+     * add a group in the second chain with the prefix from miners if success
+     * @param transactionBlocksGroup
+     * @param prefix
+     * @param baseAction
+     * @param verificator
+     */
+    public void receivedTransactionBlockGroupPrefixConfirmation(TransactionBlock[] transactionBlocksGroup,int prefix,SecurityAction baseAction,Miner verificator)
+    {
+        this.locker.lock();
+
+        // ignore if already performed
+        if(baseAction.getAlreadyPerformed() || prefix == -1)
+        {
+            this.printerPage.printMessage("Un préfix d'un mineur vient d'être ignoré car déjà complété par un autre",MessageType.MINER);
+
+            return;
+        }
+
+        int currentIndex = this.confirmationsBlock.size();
+
+        double workMoney = 300;
+
+        try
+        {     
+            ConfirmationBlock confirmationBlock = new ConfirmationBlock(transactionBlocksGroup,currentIndex != 0 ? this.confirmationsBlock.get(currentIndex - 1).getBlockHash() : null,MessageDigest.getInstance("SHA-256"),verificator,workMoney,prefix);
+
+            Participant miner = verificator.getMiner();
+
+            this.printerPage.printMessage(String.join(" ","envoie de",Double.toString(workMoney),"€ au mineur",miner.getFname(),miner.getName(),"pour le travail de recherche de préfix"),MessageType.MINER);
+
+            confirmationBlock.transferMoneyToMiner();
+
+            this.confirmationsBlock.add(confirmationBlock);
+
+            baseAction.setAsPerfomed();
+
+            this.incompleteActions.remove(baseAction);
+
+            if(this.haveToStopAfterActions && this.incompleteActions.size() == 0)
+                this.endAuction();
+        }
+        catch(Exception e){}
 
         this.locker.unlock();
     }
@@ -204,6 +291,24 @@ public class SecurityManager
         return result;
     }
 
+    /**
+     * create a hash by concatenate the hash of all transactions block
+     * @param transactionBlockGroup
+     * @param hasher
+     * @return hash
+     */
+    public static byte[] buildHashFromGroup(TransactionBlock[] transactionBlockGroup,MessageDigest hasher)
+    {
+        byte[] blockHash = transactionBlockGroup[0].getBlockHash();
+
+        int size = transactionBlockGroup.length;
+
+        for(int index = 1; index < size; index++)
+            blockHash = SecurityManager.concatBytes(blockHash,transactionBlockGroup[index].getBlockHash() );
+
+        return blockHash;
+    }
+
     class TransactionBlock
     {
         private byte[] previousBlockHash;
@@ -215,6 +320,8 @@ public class SecurityManager
         
         private Offer blockOffer;
 
+        private boolean isVerified;
+
         public TransactionBlock(Offer blockOffer,int sellerId,int objectId,int transactionBlockId,TransactionBlock previousBlock,MessageDigest hasher)
         {
             this.previousBlockHash = previousBlock == null ? null : previousBlock.getBlockHash();
@@ -222,7 +329,16 @@ public class SecurityManager
             this.objectId = objectId;
             this.transactionBlockId = transactionBlockId;
             this.blockOffer = blockOffer;   
+            this.isVerified = false;
             this.blockHash = this.buildHash(hasher);
+        }
+
+        /**
+         * set this block as verifed
+         */
+        synchronized public void setAsVerified()
+        {
+            this.isVerified = true;
         }
 
         /**
@@ -290,36 +406,38 @@ public class SecurityManager
         {
             return this.blockHash;
         }
+        
+        /**
+         * Get the value of isVerified
+         * @return if this block is verified
+         */
+        synchronized public boolean getIsVerified()
+        {
+            return this.isVerified;
+        }
     }
 
     class ConfirmationBlock
     {
-        private TransactionBlock[] containedTransactions;
+        private TransactionBlock[] containedTransactionsBlock;
 
         private byte[] previousBlockHash;
         private byte[] blockHash;
 
         private Miner minerWitchFound;
 
-        private Double workMoney;
+        private double workMoney;
 
-        private ArrayList<TransactionBlock> containedTransactionsBlock;
+        private int prefix;
 
-        public ConfirmationBlock(ArrayList<TransactionBlock> containedTransactionsBlock,byte[] previousBlockHash,MessageDigest hasher)
+        public ConfirmationBlock(TransactionBlock[] containedTransactionsBlock,byte[] previousBlockHash,MessageDigest hasher,Miner minerWitchFound,double workMoney,int prefix)
         {
             this.containedTransactionsBlock = containedTransactionsBlock;
             this.previousBlockHash = previousBlockHash;
-
-            // this hash is the hash value of the concatenation of all transactionblock hash
-            this.blockHash = containedTransactionsBlock.get(0).getBlockHash();
-            
-            for(TransactionBlock b : containedTransactionsBlock.subList(1,containedTransactionsBlock.size() ) )
-                this.blockHash = SecurityManager.concatBytes(this.blockHash,b.getBlockHash() );
-
-            if(previousBlockHash != null)
-                this.blockHash = SecurityManager.concatBytes(previousBlockHash,this.blockHash);
-
-            this.blockHash = hasher.digest(this.blockHash);
+            this.minerWitchFound = minerWitchFound;
+            this.workMoney = workMoney;
+            this.prefix = prefix;
+            this.blockHash = SecurityManager.buildHashFromGroup(containedTransactionsBlock,hasher);
         }
 
         /**
@@ -334,9 +452,18 @@ public class SecurityManager
          * Get the value of containedTransactionsBlock
          * @return contained transactions list
          */
-        public ArrayList<TransactionBlock> getContainedTransactionsBlock()
+        public TransactionBlock[] getContainedTransactionsBlock()
         {
             return this.containedTransactionsBlock;
+        }
+
+        /**
+         * Get the value of workMoney
+         * @return workMoney
+         */
+        public double getWorkMoney()
+        {
+            return this.workMoney;
         }
 
         /**
@@ -356,5 +483,14 @@ public class SecurityManager
         {
             return this.previousBlockHash;
         }
+
+        /**
+         * Get the value of prefix
+         * @return
+         */
+        public int getPrefix()
+        {
+            return this.prefix;
+        }   
     }
 }

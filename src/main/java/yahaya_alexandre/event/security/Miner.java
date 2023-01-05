@@ -1,6 +1,7 @@
 package yahaya_alexandre.event.security;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
@@ -52,6 +53,8 @@ public class Miner extends Thread
 
             Random random = new Random();
 
+            TransactionBlock[] groupToVerify;
+
             while(!exit)
             {
                 // get the action to perform or wait until an action come
@@ -64,11 +67,19 @@ public class Miner extends Thread
                 switch(actionToPerform.getAction() )
                 {
                     case VERIFY:
-                        this.printerPage.printMessage(String.join(" ","Les mineurs ont recu un nouveau paquet à vérifier sur l'objet",objectName),MessageType.MINER);
+                        this.printerPage.printMessage(String.join(" ","Le mineur <<",this.miner.getFname(),this.miner.getName(),">> a recu un nouveau paquet à vérifier sur l'objet",objectName),MessageType.MINER);
 
-                        TransactionBlock[] groupToVerify = actionToPerform.getTransactionBlockGroup();
+                        groupToVerify = actionToPerform.getTransactionBlockGroup();
                         
-this.security.receiveTransactionBlockGroupVerificationConfirmation(groupToVerify,this.verifyTransactionBlockGroup(groupToVerify,actionToPerform.getHasher(),random),actionToPerform);
+this.security.receiveTransactionBlockGroupVerificationConfirmation(groupToVerify,this.verifyTransactionBlockGroup(groupToVerify,random),actionToPerform);
+                    ; break;
+
+                    case SEARCH_PREFIX:
+                        this.printerPage.printMessage(String.join(" ","Le mineur <<",this.miner.getFname(),this.miner.getName(),">> a recu un nouveau paquet dont il doit trouver le préfixe sur l'objet",objectName),MessageType.MINER);
+
+                        groupToVerify = actionToPerform.getTransactionBlockGroup();
+
+                        this.security.receivedTransactionBlockGroupPrefixConfirmation(groupToVerify,this.searchPrefix(groupToVerify,actionToPerform),actionToPerform,this);
                     ; break;
 
                     default:
@@ -82,6 +93,8 @@ this.security.receiveTransactionBlockGroupVerificationConfirmation(groupToVerify
         catch(Exception e)
         {
             this.printerPage.printMessage("erreur sur le mineur déconnexion",MessageType.MINER);
+            // System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -90,42 +103,96 @@ this.security.receiveTransactionBlockGroupVerificationConfirmation(groupToVerify
      * @param transactionBlockGroup
      * @return
      */
-    public boolean verifyTransactionBlockGroup(TransactionBlock[] transactionBlockGroup,MessageDigest hasher,Random random)
+    public boolean verifyTransactionBlockGroup(TransactionBlock[] transactionBlockGroup,Random random)
     {   
-        int size = transactionBlockGroup.length;
-
-        for(int i = 0; i < size - 1; i++)
+        try
         {
-            TransactionBlock transactionBlock = transactionBlockGroup[i];
+            MessageDigest hasher = MessageDigest.getInstance("SHA-256");
 
-            // if test mode is active the miner will change the offer price in one block so the verification have to faill
-            if(Miner.ACTIVE_TEST)
+            int size = transactionBlockGroup.length;
+
+            for(int i = 0; i < size - 1; i++)
             {
-                if(!random.nextBoolean() )
-                {
-                    this.printerPage.printMessage("Le mineur a décidé de changer une valeur pour le test",MessageType.MINER);
+                TransactionBlock transactionBlock = transactionBlockGroup[i];
 
-                    transactionBlock.changeSomething(random);
+                // if test mode is active the miner will change the offer price in one block so the verification have to faill
+                if(Miner.ACTIVE_TEST)
+                {
+                    if(!random.nextBoolean() )
+                    {
+                        this.printerPage.printMessage("Le mineur a décidé de changer une valeur pour le test",MessageType.MINER);
+
+                        transactionBlock.changeSomething(random);
+                    }
+                }
+                
+                // get the block current hash to compare him with the saved hash in the next block
+                byte[] thisHash = transactionBlock.buildHash(hasher);
+                byte[] saveHash = transactionBlockGroup[i + 1].getPreviousBlockHash();
+
+                int hashSize = thisHash.length;
+
+                if(hashSize != saveHash.length)
+                    return false;
+
+                for(int index = 0; index < hashSize; index++)
+                {
+                    if(thisHash[index] != saveHash[index])
+                        return false;
                 }
             }
-            
-            // get the block current hash to compare him with the saved hash in the next block
-            byte[] thisHash = transactionBlock.buildHash(hasher);
-            byte[] saveHash = transactionBlockGroup[i + 1].getPreviousBlockHash();
-
-            int hashSize = thisHash.length;
-
-            if(hashSize != saveHash.length)
-                return false;
-
-            for(int index = 0; index < hashSize; index++)
-            {
-                if(thisHash[index] != saveHash[index])
-                    return false;
-            }
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            return false;
         }
 
         return true;
+    }
+
+    /**
+     * search a prefix for the group
+     * @param transactionBlockGroup
+     * @param hasher
+     * @return the prefix or -1 if action already performed or error
+     */
+    public int searchPrefix(TransactionBlock[] transactionBlockGroup,SecurityAction baseAction)
+    {
+        try
+        {
+            int toAdd = 0;
+
+            MessageDigest hasher = MessageDigest.getInstance("SHA-256");
+
+            byte[] hashFromGroup = SecurityManager.buildHashFromGroup(transactionBlockGroup,hasher);
+
+            while(true)
+            {   
+                // create a new hash
+                byte[] newHash = hasher.digest(SecurityManager.concatBytes(Integer.toString(toAdd).getBytes(),hashFromGroup) );
+
+                int size = newHash.length;
+
+                // check the number of need zero
+                for(int i = 0; i < SecurityManager.COUNT_OF_ZERO && i < size; i++)
+                {
+                    if(newHash[i] != 0)
+                        break;
+
+                    if(i + 1 == SecurityManager.COUNT_OF_ZERO)
+                        return toAdd;
+                }
+
+                // exit loop if the action already performed
+                if(baseAction.getAlreadyPerformed() )
+                    break;
+
+                toAdd++;
+            }
+        }
+        catch(NoSuchAlgorithmException e){}
+
+        return -1;
     }
 
     /**
