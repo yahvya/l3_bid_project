@@ -108,6 +108,10 @@ public class EventViewer extends EventPage
                         messageContainer.getStyleClass().add("miner");
                     ; break;
 
+                    case MONEY_TRANSMISSION:
+                        messageContainer.getStyleClass().add("money-transmission");
+                    ; break;
+                    
                     default:;
                 }
 
@@ -312,5 +316,5 @@ public class EventViewer extends EventPage
         return failedEventsZone;
     }
     
-    public enum MessageType{SUCCESS,FAILURE,STATE,NORMAL,MINER};
+    public enum MessageType{SUCCESS,FAILURE,STATE,NORMAL,MINER,MONEY_TRANSMISSION};
 }

@@ -16,7 +16,8 @@ import yahaya_alexandre.event.security.SecurityAction.ActionType;
 public class SecurityManager
 {
     public static final int COUNT_OF_BLOCK_BEFORE_VERIFICATION = 2;
-    public static final int COUNT_OF_ZERO = 3; // greater reasonable value we found to test
+    // greater reasonnable value for test mode
+    public static final int COUNT_OF_ZERO = 3;
     public static final int MIN_MINERS = 2;
     public static final int MAX_MINERS = 4;
 
@@ -257,7 +258,7 @@ public class SecurityManager
 
             Participant miner = verificator.getMiner();
 
-            this.printerPage.printMessage(String.join(" ","envoie de",Double.toString(workMoney),"€ au mineur",miner.getFname(),miner.getName(),"pour le travail de recherche de préfix"),MessageType.MINER);
+            this.printerPage.printMessage(String.join(" ","envoie de",Double.toString(workMoney),"€ au mineur",miner.getFname(),miner.getName(),"pour le travail de recherche de préfix"),MessageType.MONEY_TRANSMISSION);
 
             confirmationBlock.transferMoneyToMiner();
 
