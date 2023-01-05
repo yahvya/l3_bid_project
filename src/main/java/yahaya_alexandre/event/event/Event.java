@@ -51,7 +51,7 @@ public class Event implements Serializable
                 auction.setPrinterPage(manager);
                 auction.setParticipants(participants);
                 
-                SecurityManager auctionSecurity = new SecurityManager(auction);
+                new SecurityManager(auction);
 
                 ZonedDateTime startDateTime = auction.getStartDateTime();
 

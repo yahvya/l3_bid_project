@@ -159,7 +159,7 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
                     security.setAuctionAsFinished();
                 }
             },now.isAfter(this.endDateTime) ? 0 : now.until(this.endDateTime,ChronoUnit.MILLIS),TimeUnit.MILLISECONDS);
-
+            
             this.printerPage.printMessage(String.join(" ","début de la vente de la vente de l'objet",this.sellData),MessageType.STATE);
             this.printerPage.setAuctionIsStarted(this);
             this.security.setAuctionAsStarted();
@@ -177,6 +177,8 @@ public class Auction extends ObservableAuction implements Runnable,Serializable
             }
             
             this.printerPage.printMessage(String.join(" ","fin de la vente de la vente de l'objet",this.sellData,"attente de la fin des opérations de sécurité"),MessageType.STATE);
+
+            scheduler.close();
         }
         catch(Exception e)
         {
